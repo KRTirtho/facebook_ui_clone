@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class PostCard extends StatelessWidget {
   const PostCard({Key key}) : super(key: key);
@@ -16,8 +17,18 @@ class PostCard extends StatelessWidget {
   }
 }
 
+enum PostActionValues {
+  save,
+  turnOnNotifications,
+  hide,
+  embed,
+  snooze,
+  unfollow,
+  support
+}
+
 class CardHeader extends StatelessWidget {
-  const CardHeader({Key key}) : super(key: key);
+  CardHeader({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -41,21 +52,106 @@ class CardHeader extends StatelessWidget {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                 ),
                 // date
-                Text(new DateTime.now().toString(),
+                Text(
+                    timeago.format(
+                        new DateTime.now().subtract(Duration(minutes: 15))),
                     style: TextStyle(fontSize: 12))
               ],
               crossAxisAlignment: CrossAxisAlignment.start,
             ),
           ),
           Spacer(),
-          IconButton(
+          PopupMenuButton<PostActionValues>(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10))),
             icon: Icon(Icons.more_horiz),
-            onPressed: () {
-              print("I need more...");
+            offset: Offset(0, 70),
+            itemBuilder: (BuildContext context) {
+              return [
+                PopupMenuItem(
+                    child: PopupMenuItemChild(
+                        icon: Icons.bookmark_border_outlined,
+                        title: "Save Post"),
+                    value: PostActionValues.save),
+                PopupMenuDivider(),
+                PopupMenuItem(
+                  child: PopupMenuItemChild(
+                      icon: Icons.notifications_none_outlined,
+                      title: "Tun on notifications for this post"),
+                  value: PostActionValues.turnOnNotifications,
+                ),
+                PopupMenuItem(
+                  child: PopupMenuItemChild(
+                      icon: Icons.code_outlined, title: "Embed"),
+                  value: PostActionValues.embed,
+                ),
+                PopupMenuDivider(),
+                PopupMenuItem(
+                  child: PopupMenuItemChild(
+                      icon: Icons.close_rounded,
+                      title: "Hide Post",
+                      subtitle: "See fewer post like this"),
+                  value: PostActionValues.hide,
+                ),
+                PopupMenuItem(
+                  child: PopupMenuItemChild(
+                      icon: Icons.timelapse_outlined,
+                      title: "Snooze  KR. Tirtho for 30 days",
+                      subtitle: "Temporarily stop seeing post"),
+                  value: PostActionValues.snooze,
+                ),
+                PopupMenuItem(
+                    child: PopupMenuItemChild(
+                        icon: Icons.dangerous,
+                        title: "Unfollow KR. Tirtho",
+                        subtitle: "Stop seeing posts but stay friends"),
+                    value: PostActionValues.unfollow),
+                PopupMenuItem(
+                  child: PopupMenuItemChild(
+                      icon: Icons.support_agent_outlined,
+                      title: "Find support or report post ",
+                      subtitle: "I'm concerned about this post"),
+                  value: PostActionValues.support,
+                ),
+              ];
             },
           )
         ],
       ),
+    );
+  }
+}
+
+class PopupMenuItemChild extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  const PopupMenuItemChild(
+      {Key key, @required this.icon, @required this.title, this.subtitle})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    List<Widget> textList = [Text(title)];
+    if (subtitle != null) {
+      textList.add(Padding(
+        padding: const EdgeInsets.only(top: 8),
+        child: Text(subtitle,
+            style: TextStyle(color: Colors.grey[700], fontSize: 12)),
+      ));
+    }
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Icon(icon),
+        SizedBox(width: 5),
+        Flexible(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: textList,
+          ),
+        )
+      ],
     );
   }
 }
@@ -128,7 +224,8 @@ class _CardActionsState extends State<CardActions> {
         children: [
           // like
           CardActionButton(
-              child: Icon(Icons.thumb_up,
+              child: Icon(
+                  isLikedPost ? Icons.thumb_up_alt : Icons.thumb_up_off_alt,
                   size: CardActions.icon_size,
                   color: isLikedPost
                       ? Theme.of(context).accentColor
@@ -141,7 +238,7 @@ class _CardActionsState extends State<CardActions> {
           // comment
           CardActionButton(
             child: Icon(
-              Icons.comment_rounded,
+              Icons.comment_outlined,
               size: CardActions.icon_size,
             ),
             onPressed: () {
@@ -151,7 +248,7 @@ class _CardActionsState extends State<CardActions> {
           // share
           CardActionButton(
             child: Icon(
-              Icons.share_rounded,
+              Icons.share_outlined,
               size: CardActions.icon_size,
             ),
             onPressed: () {
@@ -168,17 +265,27 @@ class _CardActionsState extends State<CardActions> {
 class CardActionButton extends StatelessWidget {
   final Widget child;
   final VoidCallback onPressed;
-  const CardActionButton({Key key, this.child, this.onPressed})
+  final Color color;
+  final Color textColor;
+  final double borderRadius;
+  const CardActionButton(
+      {Key key,
+      this.child,
+      this.onPressed,
+      this.color,
+      this.textColor,
+      this.borderRadius})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return FlatButton(
       child: child,
-      color: Colors.grey[200],
+      color: color ?? Colors.grey[200],
+      textColor: textColor,
       onPressed: onPressed,
       shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(20)),
+          borderRadius: BorderRadius.all(Radius.circular(borderRadius ?? 20)),
           side: BorderSide(color: Colors.transparent)),
     );
   }

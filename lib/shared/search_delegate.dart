@@ -25,7 +25,7 @@ class Search extends SearchDelegate {
     );
   }
 
-  String selectedResult;
+  String selectedResult = "";
 
   @override
   Widget buildResults(BuildContext context) {
@@ -38,18 +38,9 @@ class Search extends SearchDelegate {
   final List<String> recentList;
   Search(this.listExample, this.recentList)
       : super(
-            searchFieldLabel: "Search on Facebook...",
-            searchFieldDecorationTheme: InputDecorationTheme(
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(50))),
-                filled: true,
-                fillColor: Colors.grey[50],
-                contentPadding: EdgeInsets.all(5),
-                isDense: true,
-                labelStyle: TextStyle(fontSize: 12),
-                focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(50)),
-                    borderSide: BorderSide(color: Colors.grey[700]))));
+          searchFieldLabel: "Search on Facebook...",
+          searchFieldStyle: TextStyle(fontSize: 15),
+        );
 
   @override
   Widget buildSuggestions(BuildContext context) {

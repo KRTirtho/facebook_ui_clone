@@ -1,0 +1,13 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Debug without VSC",
+      "type": "flutter",
+      "command": "flutter",
+      "args": ["run", "--debug", "-d", "web-server", "--verbose", "--verbose-system-logs", "--web-port", "8000"]
+    }
+  ]
+}
