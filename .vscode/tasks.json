@@ -7,7 +7,32 @@
       "label": "Debug without VSC",
       "type": "flutter",
       "command": "flutter",
-      "args": ["run", "--debug", "-d", "web-server", "--verbose", "--verbose-system-logs", "--web-port", "8000"]
+      "args": [
+        "run",
+        "--debug",
+        "-d",
+        "web-server",
+        "--verbose",
+        "--verbose-system-logs",
+        "--web-port",
+        "8000"
+      ]
+    },
+    {
+      "label": "Debug with Chrome",
+      "type": "flutter",
+      "options": {
+        "env": {
+          "JAVA_HOME": "/usr/lib/jvm/java-8-openjdk"
+        }
+      },
+      "command": "flutter",
+      "args": [
+        "run",
+        "--debug",
+        "-d",
+        "chrome",
+      ],
     }
   ]
 }
