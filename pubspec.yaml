@@ -28,6 +28,7 @@ dependencies:
   infinite_scroll_pagination: ^2.2.3
   line_awesome_flutter: ^1.0.1
   numeral: ^1.0.4
+  provider: ^4.3.2+3
   timeago: ^2.0.29
 
 dev_dependencies:

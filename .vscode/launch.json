@@ -5,7 +5,12 @@
     "name": "facebookui with chrome",
     "type": "dart",
     "request": "launch",
-    "program": "lib/main.dart"
+    "program": "lib/main.dart",
+    "args": [
+        "--debug",
+        "-d",
+        "chrome",
+      ]
   },
     {
       "name": "facebookui",
