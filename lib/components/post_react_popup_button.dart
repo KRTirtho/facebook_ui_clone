@@ -4,16 +4,34 @@ import 'package:facebookui/helper_functions/toIndexLetterUppercase.dart';
 import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
+const double kReactionPopupMediaMinWidth = 370;
+
 class PostReactPopupButton extends StatefulWidget {
+  ///don't use `onlyIcon` & `onlyText` together
+  final bool onlyIcon;
+
+  ///don't use `onlyIcon` & `onlyText` together
+  final bool onlyText;
+  final bool compact;
   final Offset translatePopup;
   final BuildContext context;
+
+  /// this one gets callbacked before inserting the `PostReactionPopup` to
+  /// `Overlay.of(context)` & after removing from the `Overlay.of(context)`
+  ///  also inside `postFrameCallBack` in `initState`. `context` is the same
+  /// passed as named parameter in this widget
+  final void Function(BuildContext context) onPopupStateChange;
   final void Function(ReactionStatus status, ReactionPopup popupState)
       onReactionChange;
   PostReactPopupButton(
       {@required this.onReactionChange,
       @required this.context,
       Key key,
-      this.translatePopup})
+      this.onPopupStateChange,
+      this.translatePopup,
+      this.onlyIcon = false,
+      this.onlyText = false,
+      this.compact = false})
       : super(key: key);
 
   @override
@@ -31,13 +49,25 @@ class _PostReactPopupButtonState extends State<PostReactPopupButton>
 
   @override
   void initState() {
+    // post frame for the parent widget
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      /// avoiding null value as often this can cause Exception if the prop
+      /// wasn't passed yet
+      if (widget.onPopupStateChange != null) {
+        widget.onPopupStateChange(widget.context);
+      }
+    });
     super.initState();
+
+    /// for preventing false rendering by stopping usage of both [onlyText] & [onlyIcon] together
+    if (widget.onlyIcon && widget.onlyText) {
+      throw ArgumentError(["Used both onlyIcon & onlyText together"]);
+    }
     // overlay global state
     overlayState = Overlay.of(context);
     // initializing controller for animation
-    _animationController = AnimationController(
-        duration: Duration(milliseconds: 250), //demonstration
-        vsync: this);
+    _animationController =
+        AnimationController(duration: Duration(milliseconds: 250), vsync: this);
     _reactionPopupAnimation =
         CurvedAnimation(curve: Curves.bounceIn, parent: _animationController);
     _reactionPopupAnimation.addListener(animateOverlayEntry);
@@ -116,6 +146,9 @@ class _PostReactPopupButtonState extends State<PostReactPopupButton>
 
   /// this method shows up the reaction overlay
   void _showOverlayEntry() {
+    if (widget.onPopupStateChange != null) {
+      widget.onPopupStateChange(widget.context);
+    }
     setState(() {
       _overlayEntry = _createPostReactionOverlayEntry();
       overlayState.insert(_overlayEntry);
@@ -139,6 +172,9 @@ class _PostReactPopupButtonState extends State<PostReactPopupButton>
         _reactionPopupOverlay = ReactionPopup.close;
       });
     });
+    if (widget.onPopupStateChange != null) {
+      widget.onPopupStateChange(widget.context);
+    }
   }
 
   @override
@@ -154,32 +190,44 @@ class _PostReactPopupButtonState extends State<PostReactPopupButton>
                 ? Colors.black
                 : Colors.yellow[800];
 
-    return CardActionButton(
-      color: Colors.transparent,
-      borderRadius: 0.0,
+    return TextButton(
+      style: ButtonStyle(
+        shape: MaterialStateProperty.all<OutlinedBorder>(RoundedRectangleBorder(
+            borderRadius: widget.onlyIcon
+                ? BorderRadius.circular(50.0)
+                : BorderRadius.zero)),
+        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+          widget.compact ? EdgeInsets.zero : EdgeInsets.all(10.0),
+        ),
+      ),
       child: Row(
         children: [
-          isLikedOnly || postNotReacted
-              ? Icon(
+          if (!widget.onlyText) ...[
+            if (isLikedOnly || postNotReacted)
+              Icon(
                   isLikedOnly ? Icons.thumb_up_alt : LineAwesomeIcons.thumbs_up,
                   color: isLikedOnly
                       ? Theme.of(context).primaryColor
                       : Theme.of(context).iconTheme.color)
-              : Image(
-                  height: imgDims,
-                  width: imgDims,
-                  image: AssetImage(decideLikeButtonIcon(_reactionStatus)),
-                ),
-          SizedBox(width: 5),
-          Text(
-            _reactionStatus != null
-                ? toIndexLetterUppercase(
-                    _reactionStatus.toString().split(".")[1], 0)
-                : "Like",
-            style: TextStyle(
-                color: reactionColor,
-                fontWeight: postNotReacted ? null : FontWeight.bold),
-          )
+            else
+              Image(
+                height: imgDims,
+                width: imgDims,
+                image: AssetImage(decideLikeButtonIcon(_reactionStatus)),
+              )
+          ],
+          if (!widget.onlyIcon) ...[
+            SizedBox(width: 5),
+            Text(
+              _reactionStatus != null
+                  ? toIndexLetterUppercase(
+                      _reactionStatus.toString().split(".")[1], 0)
+                  : "Like",
+              style: TextStyle(
+                  color: reactionColor,
+                  fontWeight: postNotReacted ? null : FontWeight.bold),
+            )
+          ]
         ],
       ),
       onPressed: () {
@@ -235,8 +283,11 @@ class PostReactionPopup extends StatelessWidget {
             children: reactionList.map((reaction) {
           double imgDims =
               reaction["status"] == ReactionStatus.care ? 28.0 : 48.0;
+
           double responsiveImgDims =
-              MediaQuery.of(context).size.width < 350 ? imgDims - 15 : imgDims;
+              MediaQuery.of(context).size.width < kReactionPopupMediaMinWidth
+                  ? imgDims - 7
+                  : imgDims;
           return InkWell(
             // reaction icon buttons
             onTap: () {

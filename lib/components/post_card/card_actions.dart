@@ -25,15 +25,22 @@ class _CardActionsState extends State<CardActions> {
       enableDrag: true,
       isScrollControlled: true,
       builder: (context) {
-        return Container(
-          decoration: BoxDecoration(
-              color: Theme.of(context).backgroundColor,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(5),
-                topRight: Radius.circular(5),
-              )),
-          height: MediaQuery.of(context).size.height * 98 / 100, //98%
-          child: PostCardCommentView(),
+        return SafeArea(
+          top: true,
+          child: Container(
+            margin: EdgeInsets.only(
+              top: MediaQuery.of(context).size.height *
+                  2 /
+                  100, //2% from the top
+            ),
+            decoration: BoxDecoration(
+                color: Theme.of(context).backgroundColor,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(5),
+                  topRight: Radius.circular(5),
+                )),
+            child: PostCardCommentView(),
+          ),
         );
       },
     );
@@ -101,6 +108,7 @@ class CardActionButton extends StatelessWidget {
   final Color color;
   final Color textColor;
   final double borderRadius;
+  final EdgeInsetsGeometry padding;
   const CardActionButton(
       {Key key,
       this.child,
@@ -108,12 +116,14 @@ class CardActionButton extends StatelessWidget {
       this.onLongPress,
       this.color,
       this.textColor,
-      this.borderRadius})
+      this.borderRadius,
+      this.padding})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return FlatButton(
+      padding: padding,
       child: child,
       color: color ?? Colors.grey[200],
       textColor: textColor,

@@ -1,3 +1,4 @@
+import 'package:facebookui/components/post_react_popup_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
@@ -10,6 +11,8 @@ class PostCardCommentView extends StatefulWidget {
 }
 
 class _PostCardCommentViewState extends State<PostCardCommentView> {
+  Size popupBtnSize;
+
   @override
   Widget build(BuildContext context) {
     InputBorder inputBorder = OutlineInputBorder(
@@ -20,25 +23,37 @@ class _PostCardCommentViewState extends State<PostCardCommentView> {
     return Column(
       children: [
         // header for post comment view like actions
+
         AppBar(
           elevation: 2,
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-            topRight: Radius.circular(5),
-            topLeft: Radius.circular(5),
-          )),
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(5),
+              topLeft: Radius.circular(5),
+            ),
+          ),
           backgroundColor: Theme.of(context).backgroundColor,
           leading: BackButton(
             color: Colors.black,
           ),
           actions: [
-            IconButton(
-              icon: Icon(
-                LineAwesomeIcons.thumbs_up,
-                color: Colors.black,
-              ),
-              onPressed: () {},
-            ),
+            // like button for the post
+            Builder(builder: (context) {
+              double validDX = popupBtnSize != null ? popupBtnSize.width : 0;
+              return PostReactPopupButton(
+                context: context,
+                onlyIcon: true,
+                translatePopup: Offset(-validDX * 4.25, 27.0),
+                onPopupStateChange: (context) {
+                  if (popupBtnSize == null) {
+                    setState(() {
+                      popupBtnSize = context.size;
+                    });
+                  }
+                },
+                onReactionChange: (status, popupState) {},
+              );
+            }),
           ],
           title: Text(
             "Fokunni, What the hell & 1.3k other",
@@ -154,12 +169,12 @@ class _CardCommentItemsState extends State<CardCommentItems> {
             ),
             SizedBox(width: 8.0),
             // like button
-            InkWell(
-              child: Text(
-                "Like",
-                style: subtitle3,
-              ),
-              onTap: () {},
+            PostReactPopupButton(
+              context: context,
+              compact: true,
+              translatePopup: Offset(30.0, 0.0),
+              onlyText: true,
+              onReactionChange: (status, popupState) {},
             ),
             SizedBox(width: 8.0),
             // reply button
