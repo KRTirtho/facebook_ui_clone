@@ -28,7 +28,6 @@ class _RootViewState extends State<RootView> {
     super.initState();
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPosts(pageKey);
-      print("Paginated: $pageKey");
     });
   }
 

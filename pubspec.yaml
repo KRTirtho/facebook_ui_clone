@@ -23,6 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  cached_network_image: ^2.5.0
   cupertino_icons: ^1.0.1
   http: ^0.12.2
   infinite_scroll_pagination: ^2.2.3

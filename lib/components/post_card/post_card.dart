@@ -79,11 +79,11 @@ class _PostCardState extends State<PostCard>
             ),
             CardActions(
                 // gets called after reactionStatus change
-                onPostReactPopupStatusChange: (status, popupStatus) {
+                onPostReactPopupStatusChange: (status, prevStatus) {
               setState(() {
-                if (status == null) {
+                if (prevStatus != null && status == null) {
                   reactCount--;
-                } else {
+                } else if (prevStatus == null && status != null) {
                   reactCount++;
                 }
               });

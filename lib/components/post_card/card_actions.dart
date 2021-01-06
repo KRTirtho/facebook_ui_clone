@@ -1,11 +1,11 @@
 import 'package:facebookui/components/post_card/post_card_comment_view.dart';
 import 'package:facebookui/components/post_card/post_card_shared_abstracts.dart';
-import 'package:facebookui/components/post_react_popup_button.dart';
+import 'package:facebookui/components/post_card/post_react_popup_button.dart';
 import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
 class CardActions extends StatefulWidget {
-  final void Function(ReactionStatus status, ReactionPopup popupStatus)
+  final void Function(ReactionStatus status, ReactionStatus prevStatus)
       onPostReactPopupStatusChange;
   const CardActions({
     Key key,

@@ -1,4 +1,6 @@
-import 'package:facebookui/components/post_react_popup_button.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:facebookui/components/post_card/post_react_popup_button.dart';
+import 'package:facebookui/shared/adaptive_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
@@ -43,7 +45,13 @@ class _PostCardCommentViewState extends State<PostCardCommentView> {
               return PostReactPopupButton(
                 context: context,
                 onlyIcon: true,
-                translatePopup: Offset(-validDX * 4.25, 27.0),
+                translatePopup: Offset(
+                    -validDX *
+                        (MediaQuery.of(context).size.width >
+                                kReactionPopupMediaMinWidth
+                            ? 4.75
+                            : 3.8),
+                    27.0),
                 onPopupStateChange: (context) {
                   if (popupBtnSize == null) {
                     setState(() {
@@ -132,9 +140,9 @@ class _CardCommentItemsState extends State<CardCommentItems> {
 
     return ListTile(
       isThreeLine: true,
-      leading: CircleAvatar(
-        backgroundImage:
-            NetworkImage("https://randomuser.me/api/portraits/women/67.jpg"),
+      leading: AdaptiveNetworkImage(
+        "https://randomuser.me/api/portraits/women/67.jpg",
+        isAvatar: true,
       ),
       title: Container(
         padding: EdgeInsets.all(8.0),

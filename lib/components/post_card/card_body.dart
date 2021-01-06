@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:facebookui/shared/adaptive_network_image.dart';
 import 'package:flutter/material.dart';
 
 class CardBody extends StatefulWidget {
@@ -46,7 +48,7 @@ class _CardBodyState extends State<CardBody> {
           },
         ),
         // image
-        if (widget.media != null) Image(image: NetworkImage(widget.media))
+        if (widget.media != null) AdaptiveNetworkImage(widget.media)
       ],
     );
   }

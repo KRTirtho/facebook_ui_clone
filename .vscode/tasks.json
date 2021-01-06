@@ -32,6 +32,7 @@
         "--debug",
         "-d",
         "chrome",
+        "--dart-define=FLUTTER_WEB_AUTO_DETECT=true"
       ],
     }
   ]

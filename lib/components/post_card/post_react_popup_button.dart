@@ -1,4 +1,3 @@
-import 'package:facebookui/components/post_card/card_actions.dart';
 import 'package:facebookui/components/post_card/post_card_shared_abstracts.dart';
 import 'package:facebookui/helper_functions/toIndexLetterUppercase.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +20,7 @@ class PostReactPopupButton extends StatefulWidget {
   ///  also inside `postFrameCallBack` in `initState`. `context` is the same
   /// passed as named parameter in this widget
   final void Function(BuildContext context) onPopupStateChange;
-  final void Function(ReactionStatus status, ReactionPopup popupState)
+  final void Function(ReactionStatus status, ReactionStatus prevStatus)
       onReactionChange;
   PostReactPopupButton(
       {@required this.onReactionChange,
@@ -126,12 +125,9 @@ class _PostReactPopupButtonState extends State<PostReactPopupButton>
             child: Opacity(
               opacity: _reactionPopupAnimation.value,
               child: PostReactionPopup(
-                onChanged: () {
-                  widget.onReactionChange(
-                      _reactionStatus, _reactionPopupOverlay);
-                  _dismissOverlayEntry();
-                },
+                onChanged: _dismissOverlayEntry,
                 setReactionStatus: (status) {
+                  widget.onReactionChange(status, _reactionStatus);
                   setState(() {
                     _reactionStatus = status;
                   });
@@ -231,11 +227,13 @@ class _PostReactPopupButtonState extends State<PostReactPopupButton>
         ],
       ),
       onPressed: () {
+        ReactionStatus newReactionStatus =
+            isLikedOnly || !postNotReacted ? null : ReactionStatus.like;
+
+        widget.onReactionChange(newReactionStatus, _reactionStatus);
         setState(() {
-          _reactionStatus =
-              isLikedOnly || !postNotReacted ? null : ReactionStatus.like;
+          _reactionStatus = newReactionStatus;
         });
-        widget.onReactionChange(_reactionStatus, _reactionPopupOverlay);
       },
       onLongPress: () {
         if (_reactionPopupOverlay == ReactionPopup.open) {

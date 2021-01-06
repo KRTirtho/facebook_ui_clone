@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:facebookui/components/post_card/popup_menu_item_child.dart';
+import 'package:facebookui/shared/adaptive_network_image.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
 import 'post_card_shared_abstracts.dart';
@@ -117,9 +119,7 @@ class _CardHeaderState extends State<CardHeader> {
       child: Row(
         children: [
           // user avatar
-          CircleAvatar(
-            backgroundImage: NetworkImage(widget.userAvatarUrl),
-          ),
+          AdaptiveNetworkImage(widget.userAvatarUrl, isAvatar: true),
           // user name & date
           Padding(
             padding: const EdgeInsets.all(8.0),
