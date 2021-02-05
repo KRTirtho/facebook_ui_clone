@@ -1,4 +1,5 @@
 import 'package:facebookui/components/friends_requests.dart';
+import 'package:facebookui/components/menu/menu.dart';
 import 'package:facebookui/components/new_post.dart';
 import 'package:facebookui/components/notifications.dart';
 import 'package:facebookui/components/post_card/post_card.dart';
@@ -104,7 +105,7 @@ class _RootViewState extends State<RootView> {
         // notifications
         NotificationsView(),
         // more
-        Icon(Icons.more_horiz_outlined)
+        Menu()
       ],
       controller: widget._tabController,
     );

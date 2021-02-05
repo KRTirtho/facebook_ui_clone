@@ -21,15 +21,9 @@
     {
       "label": "Debug with Chrome",
       "type": "flutter",
-      "options": {
-        "env": {
-          "JAVA_HOME": "/usr/lib/jvm/java-8-openjdk"
-        }
-      },
       "command": "flutter",
       "args": [
         "run",
-        "--debug",
         "-d",
         "chrome",
         "--dart-define=FLUTTER_WEB_AUTO_DETECT=true"

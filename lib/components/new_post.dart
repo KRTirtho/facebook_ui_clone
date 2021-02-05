@@ -22,8 +22,8 @@ class _NewPostState extends State<NewPost> {
             children: [
               // user avatar
               CircleAvatar(
-                backgroundImage: NetworkImage(
-                    "https://scontent.fdac5-1.fna.fbcdn.net/v/t1.0-9/55627798_669139690272816_3974705543380992000_o.jpg?_nc_cat=111&ccb=2&_nc_sid=09cbfe&_nc_ohc=EV8wB4INf4wAX-02Mp6&_nc_ht=scontent.fdac5-1.fna&oh=a09d25fbf52683883bbca7023515023e&oe=60021DD1"),
+                backgroundImage:
+                    NetworkImage("https://i.imgur.com/QCNbOAo.png"),
               ),
               SizedBox(width: 5),
               // input like button

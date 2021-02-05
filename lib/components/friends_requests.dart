@@ -17,8 +17,7 @@ class FriendRequests extends StatelessWidget {
             CircleAvatar(
               maxRadius: 40,
               minRadius: 15,
-              backgroundImage: NetworkImage(
-                  "https://scontent.fdac5-2.fna.fbcdn.net/v/t1.0-9/129917362_3597237230389498_3924461286604049841_o.jpg?_nc_cat=101&ccb=2&_nc_sid=825194&_nc_ohc=mlw6BxjAcm0AX8mrn3p&_nc_ht=scontent.fdac5-2.fna&oh=ffd5f0c36fcf3ca778e7da70f2dae250&oe=5FFE9AAA"),
+              backgroundImage: NetworkImage("https://i.imgur.com/QCNbOAo.png"),
             ),
             SizedBox(
               width: 5,

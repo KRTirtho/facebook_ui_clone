@@ -21,13 +21,25 @@ class NotificationsView extends StatelessWidget {
             child: Container(
               constraints: BoxConstraints(maxWidth: kContainerMaxWidth),
               padding: EdgeInsets.all(8),
-              child: Column(
-                children: [
-                  Text(
-                    "Notifications",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-                  )
+              child: AppBar(
+                backgroundColor: Theme.of(context).backgroundColor,
+                elevation: 0.0,
+                title: Text(
+                  "Notifications",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25,
+                      color: Theme.of(context).textTheme.bodyText1.color),
+                ),
+                actions: [
+                  IconButton(
+                      icon: Icon(
+                        LineAwesomeIcons.search,
+                        color: Colors.black,
+                      ),
+                      onPressed: () {})
                 ],
+                titleSpacing: 0.0,
               ),
             ),
           ),
@@ -114,8 +126,7 @@ class _NotificationState extends State<Notification> {
       },
       leading: CircleAvatar(
           maxRadius: 40,
-          backgroundImage: NetworkImage(
-              "https://w7.pngwing.com/pngs/536/216/png-transparent-technical-support-computer-icons-user-avatar-avatar-computer-network-child-face.png")),
+          backgroundImage: NetworkImage("https://i.imgur.com/QCNbOAo.png")),
       title: RichText(
         text: TextSpan(
             style: TextStyle(color: Colors.black, fontSize: 14),
