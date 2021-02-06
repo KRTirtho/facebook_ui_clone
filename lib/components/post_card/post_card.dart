@@ -42,8 +42,10 @@ class _PostCardState extends State<PostCard>
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints(maxWidth: 500),
+      constraints: BoxConstraints(maxWidth: 700),
       child: Card(
+        elevation: 0,
+        borderOnForeground: true,
         margin: EdgeInsets.only(top: 5),
         child: Column(
           children: [

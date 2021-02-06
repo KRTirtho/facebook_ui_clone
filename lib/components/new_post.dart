@@ -13,7 +13,7 @@ class _NewPostState extends State<NewPost> {
     );
     return Container(
       color: Theme.of(context).backgroundColor,
-      constraints: BoxConstraints(maxWidth: 500),
+      constraints: BoxConstraints(maxWidth: 700),
       padding: EdgeInsets.all(8.0),
       child: Column(
         // inputs
