@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:facebookui/components/post_card/popup_menu_item_child.dart';
 import 'package:facebookui/shared/adaptive_network_image.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
